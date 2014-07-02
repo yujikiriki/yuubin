@@ -14,13 +14,13 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "javax.mail" 		% "mail" 		% "1.4.7",
-  "dnsjava"		% "dnsjava"		% "2.1.6",
-  "ch.qos.logback"	% "logback-classic"	% "1.0.13",
-  "ch.qos.logback"	% "logback-core"	% "1.0.13",
-  "org.slf4j"		% "slf4j-api"		% "1.7.5",
-  "junit"               % "junit"		% "4.10"	% "test",
-  "org.scalatest" 	% "scalatest_2.11"	% "2.2.0"	% "test"
+  "javax.mail"              % "mail"            % "1.4.7",
+  "dnsjava"                 % "dnsjava"         % "2.1.6",
+  "ch.qos.logback"          % "logback-classic" % "1.0.13",
+  "ch.qos.logback"          % "logback-core"    % "1.0.13",
+  "org.slf4j"               % "slf4j-api"       % "1.7.5",
+  "org.jvnet.mock-javamail" % "mock-javamail"   % "1.9"       % "test",
+  "org.scalatest"           % "scalatest_2.11"	% "2.2.0"	    % "test"
 )
 
 scalacOptions ++= Seq(
@@ -39,3 +39,15 @@ scalacOptions ++= Seq(
   "-Ywarn-value-discard",
   "-Xfuture" )
 
+lazy val `it-config-sbt-project` = project.in(file(".")).configs(IntegrationTest).settings( Defaults.itSettings : _*).
+  settings( libraryDependencies ++= itLibraryDependencies )
+
+lazy val itLibraryDependencies = Seq(
+  "javax.mail"              % "mail"            % "1.4.7",
+  "dnsjava"                 % "dnsjava"         % "2.1.6",
+  "ch.qos.logback"          % "logback-classic" % "1.0.13",
+  "ch.qos.logback"          % "logback-core"    % "1.0.13",
+  "org.slf4j"               % "slf4j-api"       % "1.7.5",
+  "org.jvnet.mock-javamail" % "mock-javamail"   % "1.9"       % "test",
+  "org.scalatest"           % "scalatest_2.11"	% "2.2.0"
+)
