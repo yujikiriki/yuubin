@@ -12,6 +12,13 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 
 # Work in progress
 * Send messages to CC and BCC
+* 
+
+# Development
+
+```sh
+> $: sbt
+```
 
 # License
 The MIT License (MIT)
