@@ -17,7 +17,7 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 # Development
 
 ```sh
-$: sbt
+$:> sbt
 ```
 
 # License
