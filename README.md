@@ -22,8 +22,6 @@ $:> sbt
 
 # Testing
 
-In sbt: 
-
 Integration tests
 
 ```shell
@@ -33,7 +31,7 @@ Integration tests
 Unit tests
 
 ```shell
-$:> test
+> test
 ```
 
 # License
