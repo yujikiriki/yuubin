@@ -1,41 +1,69 @@
 package co.s4n
 
-import javax.mail.{Session => MailSession, Address, Transport, Message}
+import javax.mail.{Session => MailSession, SendFailedException, Address, Transport, Message, MessagingException}
 import javax.mail.internet.MimeMessage
-import com.sun.mail.smtp.SMTPTransport
+import com.sun.mail.smtp.{SMTPSendFailedException, SMTPTransport}
 import scala.concurrent.{Future, ExecutionContext}
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
-case class Yuubin( )( implicit val ec: ExecutionContext ) {
-
+class Yuubin( listener: YuubinTransportListener ) {
   import Yuubin._
 
-  def send( e: Envelope ): Future[ Seq[ String ] ] = {
-    val session: MailSession = YuubinSessionBuilder.build( e )
-    val message = buildMessage( e, session )
+  def asyncSend( e: Envelope )( implicit ec: ExecutionContext ): Future[ List[ YuubinSendResult ] ] = {
+    val s: MailSession = YuubinSessionBuilder.build( e )
+    val m = buildMessage( e, s )
+    Future {
+      sendToRecipient( e, m, s ).toList
+    }
+  }
 
-    /* "To" recipients */
-    val result = e.to.flatMap {
+  def send( e: Envelope ): List[ YuubinSendResult ] = {
+    val s: MailSession = YuubinSessionBuilder.build( e )
+    sendToRecipient( e, buildMessage( e, s ), s ).toList
+  }
+
+  private[ Yuubin ] def sendToRecipient( e: Envelope, m: MimeMessage, s: MailSession ): Seq[ YuubinSendResult ] =
+    e.to.flatMap {
       address =>
-        val toHostname = chopHostNameFrom( address.getAddress )
-        DNSResolver.mxRecordFrom( toHostname ) map {
+        DNSResolver.mxRecordFrom( chopHostNameFrom( address.getAddress ) ) map {
           host =>
-            Future {
-              connectAndSend(
-                message,
-                new SMTPTransport( session, host ),
-                Array( address )
-              )
-            }
+            connectAndSend( m, new SMTPTransport( s, host ), Array( address ) )
         }
     }
-    Future.sequence( result )
+
+  private[ Yuubin ] def connectAndSend( mimeMessage: MimeMessage, transport: Transport, recipient: Array[ Address ] ): YuubinSendResult = {
+    transport.addTransportListener( listener )
+
+    val res: Try[ Unit ] = for {
+      connected <- Try( transport.connect( ) )
+      messageSent <- Try( transport.sendMessage( mimeMessage, recipient ) )
+    } yield messageSent
+
+    res.map {
+      _ =>
+        val smtpTransport = transport.asInstanceOf[ SMTPTransport ]
+        transport.close()
+        MessageSent( smtpTransport.getLastServerResponse )
+    }
+    .recover {
+      case ssfe: SMTPSendFailedException => // If the send failed because of an SMTP command error
+        transport.close( )
+        SMTPCommandError( ssfe )
+      case sfe: SendFailedException => // If the send failed because of invalid addresses.
+        transport.close( )
+        InvalidAddresses( sfe )
+      case me: MessagingException => // If the connection is dead or not in the connected state or if the message is not a MimeMessage.
+        transport.close( )
+        me.getMessage( ).charAt( 0 ) match {
+          case '5' => SMTPPermanentFailure( me )
+          case '4' => SMTPPersistentTemporaryFailure( me )
+          case _ => UnexpectedResponse( me )
+        }
+    }.get
   }
 }
 
 object Yuubin {
-
-  import com.sun.mail.smtp.SMTPTransport
 
   private[ Yuubin ] def buildMessage( e: Envelope, session: MailSession ): MimeMessage =
     new MimeMessage( session ) {
@@ -51,31 +79,15 @@ object Yuubin {
       }
     }
 
-  def connectAndSend( mimeMessage: MimeMessage, transport: Transport, recipient: Array[ Address ] ): String = {
-
-    val res: Try[ Boolean ] = for {
-      connected <- Try( transport.connect( ) )
-      messageSent <- Try( transport.sendMessage( mimeMessage, recipient ) )
-      b <- Try( transport.isInstanceOf[ SMTPTransport ] )
-    } yield b
-
-    val lastResponse: String = res match {
-      case Success( isSMTPTransport ) =>
-        if( isSMTPTransport ) {
-          val smtpTransport = transport.asInstanceOf[ SMTPTransport ]
-          smtpTransport.getLastServerResponse( )
-        }
-        else
-          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-      case Failure( e ) =>
-        println( "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" )
-        e.getMessage
-    }
-
-    transport.close( )
-    lastResponse
-  }
-
   private[ Yuubin ] def chopHostNameFrom( emailAddress: String ): String =
     emailAddress.substring( emailAddress.lastIndexOf( "@" ) + 1 )
+
 }
+
+sealed trait YuubinSendResult
+case class MessageSent( serverResponse: String ) extends YuubinSendResult
+case class SMTPCommandError( e: Throwable ) extends YuubinSendResult
+case class InvalidAddresses( e: Throwable ) extends YuubinSendResult
+case class SMTPPermanentFailure( e: Throwable ) extends YuubinSendResult
+case class SMTPPersistentTemporaryFailure( e: Throwable ) extends YuubinSendResult
+case class UnexpectedResponse( e: Throwable ) extends YuubinSendResult

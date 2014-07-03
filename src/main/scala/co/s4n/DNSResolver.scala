@@ -9,7 +9,10 @@ object DNSResolver {
   def mxRecordFrom( hostname: String ): Option[ URLName ] = {
     val recordsUrl: Array[ (Int, URLName) ] = defineMXRecordURL( queryMXRecords( hostname ) )
     val recordsUrlMap = recordsUrl.toMap
-    recordsUrlMap.get( recordsUrlMap.keys.max )
+    if( recordsUrlMap.keys.isEmpty )
+      None
+    else
+      recordsUrlMap.get( recordsUrlMap.keys.max )
   }
 
   private[ DNSResolver ] def queryMXRecords( hostname: String ): Array[ Record ] =
