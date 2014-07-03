@@ -4,8 +4,9 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 
 # Features
 * Async email sending using futures
-* Sync email sending
-* Complete error handling
+* Sync email sending for non concurrent scenarios
+* Complete SMTP error handling and reporting
+* Uses the DNS MX record with the highest priority
 
 # License
 The MIT License (MIT)
