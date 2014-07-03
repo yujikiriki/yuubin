@@ -3,10 +3,11 @@ Simple embeddable send-only SMTP server written in Scala.
 Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and [Courier](https://github.com/softprops/courier) projects.
 
 # Features
-* Async email sending using futures
-* Sync email sending for non concurrent scenarios
-* Complete SMTP error handling and reporting
-* Uses the DNS MX record with the highest priority
+* Simple to use. Embeddable.
+* Async email sending using futures.
+* Sync email sending for non concurrent scenarios.
+* Complete SMTP error handling and reporting.
+* Uses the DNS MX record with the highest priority.
 * Looks up the MX records through the hierarchy of subdomains.
 
 # License
