@@ -16,8 +16,24 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 
 # Development
 
-```sh
+```shell
 $:> sbt
+```
+
+# Testing
+
+In sbt: 
+
+Integration tests
+
+```shell
+> it:test
+```
+
+Unit tests
+
+```shell
+$:> test
 ```
 
 # License
