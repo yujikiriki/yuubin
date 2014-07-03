@@ -1,5 +1,5 @@
 #Yuubin
-Simple embeddable send-only SMTP server written in Scala.
+Simple embeddable send-only SMTP server written in Scala. Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and [Courier](https://github.com/softprops/courier) projects.
 
 The MIT License (MIT)
 
