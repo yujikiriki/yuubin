@@ -10,6 +10,16 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 * Uses the DNS MX record with the highest priority.
 * Looks up the MX records through the hierarchy of subdomains.
 
+# Work in progress
+* Send messages to CC and BCC
+
+
+# Development
+
+```sh
+$:> sbt
+```
+
 # License
 The MIT License (MIT)
 
