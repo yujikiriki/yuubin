@@ -15,8 +15,8 @@ class YuubinTest extends FunSuite {
 
     val e = Envelope
       .from( new InternetAddress( "yujikiriki@s4n.co" ) )
-      .to( new InternetAddress( "aaa@s4n.com" ), new InternetAddress( "angelarivers@gmail.com" ) )
-      .cc( new InternetAddress( "angelarivers@gmail.com" ) )
+      .to( new InternetAddress( "aaa@s4n.com" ), new InternetAddress( "ykr@s4n.com" ) )
+      .cc( new InternetAddress( "" ) )
       .subject( "I bug you" )
       .content( Text( "Bug." ) )
 
