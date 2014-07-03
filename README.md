@@ -7,6 +7,7 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 * Sync email sending for non concurrent scenarios
 * Complete SMTP error handling and reporting
 * Uses the DNS MX record with the highest priority
+* Looks up the MX records through the hierarchy of subdomains.
 
 # License
 The MIT License (MIT)
