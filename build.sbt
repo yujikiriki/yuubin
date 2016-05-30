@@ -1,26 +1,19 @@
-import AssemblyKeys._
-
-import spray.revolver.RevolverPlugin._
-
-assemblySettings
-
 name := "yuubin"
 
 version := "0.1"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.8"
 
-resolvers ++= Seq(
-)
+resolvers ++= Seq()
 
 libraryDependencies ++= Seq(
   "javax.mail"              % "mail"            % "1.4.7",
-  "dnsjava"                 % "dnsjava"         % "2.1.6",
-  "ch.qos.logback"          % "logback-classic" % "1.0.13",
-  "ch.qos.logback"          % "logback-core"    % "1.0.13",
-  "org.slf4j"               % "slf4j-api"       % "1.7.5",
+  "dnsjava"                 % "dnsjava"         % "2.1.7",
+  "ch.qos.logback"          % "logback-classic" % "1.1.7",
+  "ch.qos.logback"          % "logback-core"    % "1.1.7",
+  "org.slf4j"               % "slf4j-api"       % "1.7.21",
   "org.jvnet.mock-javamail" % "mock-javamail"   % "1.9"       % "test",
-  "org.scalatest"           % "scalatest_2.11"	% "2.2.0"	    % "test"
+  "org.scalatest"           % "scalatest_2.11"	% "2.2.6"	    % "test"
 )
 
 scalacOptions ++= Seq(
@@ -44,9 +37,10 @@ lazy val `it-config-sbt-project` = project.in(file(".")).configs(IntegrationTest
 
 lazy val itLibraryDependencies = Seq(
   "javax.mail"              % "mail"            % "1.4.7",
-  "dnsjava"                 % "dnsjava"         % "2.1.6",
-  "ch.qos.logback"          % "logback-classic" % "1.0.13",
-  "ch.qos.logback"          % "logback-core"    % "1.0.13",
-  "org.slf4j"               % "slf4j-api"       % "1.7.5",
-  "org.scalatest"           % "scalatest_2.11"	% "2.2.0"
+  "dnsjava"                 % "dnsjava"         % "2.1.7",
+  "ch.qos.logback"          % "logback-classic" % "1.1.7",
+  "ch.qos.logback"          % "logback-core"    % "1.1.7",
+  "org.slf4j"               % "slf4j-api"       % "1.7.21",
+  "org.jvnet.mock-javamail" % "mock-javamail"   % "1.9"       % "test",
+  "org.scalatest"           % "scalatest_2.11"  % "2.2.6"     % "test"
 )

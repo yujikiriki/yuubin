@@ -23,7 +23,7 @@ class Yuubin( listener: YuubinTransportListener ) {
   }
 
   private[ Yuubin ] def sendToRecipient( e: Envelope, m: MimeMessage, s: MailSession ): Seq[ YuubinSendResult ] =
-    e.to.flatMap {
+    (e.to ++ e._cc ++ e._bcc).flatMap {
       address =>
         DNSResolver.mxRecordFrom( chopHostNameFrom( address.getAddress ) ) map {
           host =>
