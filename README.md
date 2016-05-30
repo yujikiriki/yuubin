@@ -1,4 +1,4 @@
-#Yuubin
+# Yuubin
 Simple embeddable send-only SMTP server written in Scala. 
 Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and [Courier](https://github.com/softprops/courier) projects.
 
@@ -9,10 +9,6 @@ Heavily based and inspired on [Aspirin](https://github.com/masukomi/aspirin) and
 * Complete SMTP error handling and reporting.
 * Uses the highest priority MX record.
 * Looks up the MX records through the hierarchy of subdomains.
-
-# Work in progress
-* Send messages to CC and BCC
-
 
 # Development
 
