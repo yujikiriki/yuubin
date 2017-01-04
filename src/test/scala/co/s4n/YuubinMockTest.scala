@@ -10,9 +10,9 @@ class YuubinMockTest extends FunSuite {
     import org.jvnet.mock_javamail.Mailbox
 
     val e = Envelope
-      .from( new InternetAddress( "someone@gmail.com" ) )
-      .to( new InternetAddress( "dev1@gmail.com" ) )
-      .cc( new InternetAddress( "dev2@gmail.com" ) )
+      .from( new InternetAddress( "someone@idontcare.com" ) )
+      .to( new InternetAddress( "dev1@masteryeah.com" ) )
+      .cc( new InternetAddress( "dev2@masteryeah.com" ) )
       .subject( "I bug you" )
       .content( Text( "Bug." ) )
 
@@ -35,7 +35,7 @@ class YuubinMockTest extends FunSuite {
     val result: List[ YuubinSendResult ] = y.send( e )
     result.foreach( r => info( r.toString ) )
 
-    val dev1Inbox = Mailbox.get( "dev1@gmail.com" )
+    val dev1Inbox = Mailbox.get( "dev1@masteryeah.com" )
     assert( dev1Inbox.size === 1 )
     val devMsg = dev1Inbox.get( 0 )
     info( s"Subject = ${devMsg.getSubject}" )

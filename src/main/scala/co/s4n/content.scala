@@ -18,7 +18,7 @@ case class Multipart( _parts: Seq[ MimeBodyPart ] = Seq.empty[ MimeBodyPart ] ) 
 
   def add(
            bytes: Array[ Byte ],
-           mimetype: String,name: Option[ String ] = None,
+           mimetype: String, name: Option[ String ] = None,
            disposition: Option[ String ] = None,
            description: Option[ String ] = None ): Multipart =
     add( new MimeBodyPart {
